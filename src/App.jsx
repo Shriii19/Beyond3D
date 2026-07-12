@@ -33,12 +33,15 @@ export default function App() {
       </div>
 
       <div className="hud">
-        <div className="brand">SIGNAL / ∞</div>
-        <div className="meta">
-          DEEP-FIELD RELAY
-          <br />
-          LAT —.—— LON —.——
+        <div className="brand">
+          <span className="brand-name">INSANE</span>
+          <span className="brand-accent">3D</span>
         </div>
+        <nav className="hud-nav">
+          <span>Work</span>
+          <span>About</span>
+          <span>Contact</span>
+        </nav>
         <div className="scroll-cue">
           <span>scroll</span>
           <span className="line" />
