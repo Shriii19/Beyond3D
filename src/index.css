@@ -89,7 +89,7 @@ body {
   color: var(--muted);
   text-transform: uppercase;
 }
-.hud .brand { position: absolute; top: 2rem; left: 2rem; color: var(--text); }
+.hud .brand { position: absolute; top: 2rem; left: 2rem; color: var(--text); display: flex; align-items: baseline; gap: 0.28rem; }
 .hud .meta  { position: absolute; top: 2rem; right: 2rem; text-align: right; }
 .hud .scroll-cue {
   position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
@@ -125,4 +125,247 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .hud .scroll-cue { animation: none; }
+}
+
+/* ═══════════════════════════════════════════════════
+   INSANE 3D — Portfolio Styles
+   ═══════════════════════════════════════════════════ */
+
+/* ─── Brand ──────────────────────────────────── */
+.brand-name { color: var(--text); font-weight: 400; }
+.brand-accent { color: var(--cyan); }
+
+/* ─── HUD Nav ────────────────────────────────── */
+.hud-nav {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 2rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  pointer-events: auto;
+}
+.hud-nav span {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.hud-nav span:hover { color: var(--text); }
+
+/* ─── Title Variants ─────────────────────────── */
+.hero-title { font-size: clamp(3rem, 9.5vw, 9rem); }
+.projects-title { font-size: clamp(2rem, 5vw, 4.2rem); margin-bottom: 0; }
+
+/* ─── Wide Chapter (Projects) ────────────────── */
+.chapter.wide { padding: clamp(1.5rem, 3.5vw, 4.5rem); }
+
+/* ─── Project Grid ───────────────────────────── */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  width: 100%;
+  max-width: 960px;
+  margin-top: 1.4rem;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  pointer-events: auto;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.project-card:hover {
+  border-color: rgba(77, 208, 255, 0.28);
+  background: rgba(77, 208, 255, 0.03);
+  box-shadow: 0 0 40px rgba(77, 208, 255, 0.06);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-id {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: var(--muted);
+  opacity: 0.65;
+}
+
+.status-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 3px;
+}
+.status-badge.upcoming {
+  background: rgba(255, 211, 110, 0.1);
+  color: var(--gold);
+  border: 1px solid rgba(255, 211, 110, 0.22);
+}
+.status-badge.in-dev {
+  background: rgba(77, 255, 150, 0.1);
+  color: #52ffaa;
+  border: 1px solid rgba(77, 255, 150, 0.22);
+}
+.status-badge.live {
+  background: rgba(77, 208, 255, 0.1);
+  color: var(--cyan);
+  border: 1px solid rgba(77, 208, 255, 0.22);
+}
+
+.card-title {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.18rem;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.card-desc {
+  font-size: 0.8rem;
+  line-height: 1.52;
+  color: var(--muted);
+  font-weight: 300;
+  flex: 1;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.card-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.14rem 0.45rem;
+  border-radius: 3px;
+  background: rgba(123, 92, 255, 0.09);
+  color: var(--violet);
+  border: 1px solid rgba(123, 92, 255, 0.18);
+}
+
+/* ─── Stats ──────────────────────────────────── */
+.stat-row {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 0.28rem; }
+.stat-num {
+  font-family: "Instrument Serif", serif;
+  font-size: 2.8rem;
+  color: var(--cyan);
+  line-height: 1;
+}
+.stat-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── Tech Grid ──────────────────────────────── */
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.6rem;
+  max-width: 540px;
+  justify-content: flex-end;
+}
+
+.tech-item {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--muted);
+  pointer-events: auto;
+  transition: color 0.22s, border-color 0.22s, background 0.22s;
+}
+.tech-item:hover {
+  color: var(--text);
+  border-color: rgba(77, 208, 255, 0.35);
+  background: rgba(77, 208, 255, 0.05);
+}
+
+/* ─── CTA ────────────────────────────────────── */
+.cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  pointer-events: auto;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2.2rem;
+  border: 1px solid rgba(77, 208, 255, 0.55);
+  background: rgba(77, 208, 255, 0.05);
+  color: var(--cyan);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
+  text-decoration: none;
+}
+.cta-btn:hover {
+  background: rgba(77, 208, 255, 0.12);
+  border-color: rgba(77, 208, 255, 0.8);
+  box-shadow: 0 0 36px rgba(77, 208, 255, 0.2);
+}
+
+.cta-email {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ─── Pointer events for interactive overlay elements */
+.chapter a,
+.chapter button { pointer-events: auto; }
+
+/* ─── Mobile ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .hud-nav { display: none; }
+  .stat-row { gap: 1.5rem; }
+  .tech-grid { justify-content: flex-start; }
+  .hero-title { font-size: clamp(2.6rem, 14vw, 5rem); }
 }
