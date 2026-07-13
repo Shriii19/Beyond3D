@@ -45,10 +45,10 @@ export function Particles({ count = 1800, depth = 90 }) {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05}
-        color="#9fb4ff"
+        size={0.04}
+        color="#c8a96e"
         transparent
-        opacity={0.8}
+        opacity={0.6}
         sizeAttenuation
         depthWrite={false}
       />
@@ -64,7 +64,7 @@ export function Gates() {
         z: -i * 6 - 4,
         r: 4 + Math.sin(i * 0.7) * 1.5,
         rot: i * 0.4,
-        color: i % 2 === 0 ? "#4dd0ff" : "#ff5cf0",
+        color: i % 2 === 0 ? "#c8a96e" : "#e8d5a3",
       })),
     []
   );
@@ -99,7 +99,7 @@ export function Shards() {
           -Math.random() * 80,
         ],
         s: Math.random() * 0.4 + 0.1,
-        color: ["#4dd0ff", "#ff5cf0", "#ffd36e", "#7b5cff"][
+        color: ["#c8a96e", "#e8d5a3", "#b87428", "#d4b870"][
           Math.floor(Math.random() * 4)
         ],
       })),
