@@ -53,9 +53,9 @@ float snoise(vec3 v){
 const IridescentMaterial = shaderMaterial(
   {
     uTime: 0,
-    uColorA: new Color("#4dd0ff"),
-    uColorB: new Color("#ff5cf0"),
-    uColorC: new Color("#7b5cff"),
+    uColorA: new Color("#d4a853"),
+    uColorB: new Color("#c87820"),
+    uColorC: new Color("#f0d880"),
     uDisplace: 0.35,
   },
   /* vertex */ `
@@ -88,7 +88,7 @@ const IridescentMaterial = shaderMaterial(
       float fresnel = pow(1.0 - max(dot(vNormal, vViewDir), 0.0), 2.5);
       vec3 base = mix(uColorC, uColorA, smoothstep(-0.4, 0.4, vNoise));
       vec3 col = mix(base, uColorB, fresnel);
-      col += fresnel * 0.6;
+      col += fresnel * 0.75;
       gl_FragColor = vec4(col, 1.0);
     }
   `
