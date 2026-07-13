@@ -2,34 +2,34 @@ const projects = [
   {
     id: "001",
     title: "Nexus Core",
-    desc: "Immersive WebGL exploration of procedural geometry and iridescent GPU shading.",
+    desc: "An immersive WebGL journey through procedural geometry with custom iridescent GPU shading — precision forged in every vertex.",
     tags: ["Three.js", "GLSL", "R3F"],
     status: "upcoming",
-    statusLabel: "Upcoming",
+    statusLabel: "Forthcoming",
   },
   {
     id: "002",
     title: "Void Sculpt",
-    desc: "Real-time 3D sculpting tool built entirely on GPU compute pipelines in the browser.",
+    desc: "A real-time 3D sculpting instrument built entirely on GPU compute pipelines, running entirely in the browser.",
     tags: ["WebGPU", "WGSL", "React"],
     status: "in-dev",
-    statusLabel: "In Dev",
+    statusLabel: "In Progress",
   },
   {
     id: "003",
     title: "Luminance",
-    desc: "Physically-based rendering experiments pushing the limits of browser graphics.",
+    desc: "Physically-based rendering at the frontier of browser graphics — where light behaves as it does in the material world.",
     tags: ["R3F", "Post FX", "GLSL"],
     status: "upcoming",
-    statusLabel: "Upcoming",
+    statusLabel: "Forthcoming",
   },
   {
     id: "004",
     title: "Terrain OS",
-    desc: "Open-source procedural terrain engine with real-time hydraulic erosion simulation.",
+    desc: "An open-source procedural terrain engine with real-time hydraulic erosion — landscapes composed from pure mathematics.",
     tags: ["Three.js", "Simplex Noise"],
     status: "upcoming",
-    statusLabel: "Upcoming",
+    statusLabel: "Forthcoming",
   },
 ];
 
@@ -51,63 +51,63 @@ export default function Overlay() {
     <>
       {/* ── 01  HERO ─────────────────────────────────── */}
       <section className="chapter center">
-        <div className="eyebrow">INSANE 3D — Creative Studio</div>
+        <div className="eyebrow">INSANE 3D — Digital Atelier</div>
         <h1 className="title hero-title">
-          We build <em>impossible</em>
-          <br />things in real-time
+          We craft worlds<br />at the speed of <em>light</em>
         </h1>
         <p className="body-copy">
-          A creative studio pushing the boundaries of interactive 3D on the web.
-          <br />Every project is a living world — not just a website.
+          A creative studio building browser-native experiences<br />
+          with the precision of fine craft and the soul of art.
         </p>
       </section>
 
       {/* ── 02  ABOUT ────────────────────────────────── */}
       <section className="chapter">
-        <div className="eyebrow">01 — About</div>
+        <div className="eyebrow">01 — Philosophy</div>
         <h2 className="title">
-          Born at the edge of
-          <br />what browsers <em>can render</em>
+          Born where precision<br />meets the <em>impossible</em>
         </h2>
         <p className="body-copy">
-          We craft WebGL &amp; WebGPU experiences that feel more like living worlds
-          than websites. Every triangle is intentional. Every shader tells a story.
+          We work at the intersection of GPU artistry and editorial restraint.
+          Every triangle is deliberate. Every shader, composed.
         </p>
         <div className="stat-row">
           <div className="stat">
             <span className="stat-num">4+</span>
-            <span className="stat-label">Projects in pipeline</span>
+            <span className="stat-label">Works in pipeline</span>
           </div>
           <div className="stat">
             <span className="stat-num">60</span>
-            <span className="stat-label">FPS target, always</span>
+            <span className="stat-label">FPS, always</span>
           </div>
           <div className="stat">
             <span className="stat-num">∞</span>
-            <span className="stat-label">Ideas left to build</span>
+            <span className="stat-label">Ideas left to render</span>
           </div>
         </div>
       </section>
 
-      {/* ── 03  PROJECTS ─────────────────────────────── */}
+      {/* ── 03  WORKS ────────────────────────────────── */}
       <section className="chapter wide">
-        <div className="eyebrow">02 — Projects</div>
+        <div className="eyebrow">02 — Works</div>
         <h2 className="title projects-title">
-          What we're <em>building</em>
+          Selected <em>works</em>
         </h2>
-        <div className="project-grid">
+        <div className="works-list">
           {projects.map((p) => (
-            <div className="project-card" key={p.id}>
-              <div className="card-header">
-                <span className="card-id">/{p.id}</span>
-                <span className={`status-badge ${p.status}`}>{p.statusLabel}</span>
-              </div>
-              <div className="card-title">{p.title}</div>
-              <p className="card-desc">{p.desc}</p>
-              <div className="card-tags">
-                {p.tags.map((t) => (
-                  <span className="card-tag" key={t}>{t}</span>
-                ))}
+            <div className="work-item" key={p.id}>
+              <span className="work-num">/{p.id}</span>
+              <div className="work-body">
+                <div className="work-header">
+                  <span className="work-title">{p.title}</span>
+                  <span className={`status-badge ${p.status}`}>{p.statusLabel}</span>
+                </div>
+                <p className="work-desc">{p.desc}</p>
+                <div className="card-tags">
+                  {p.tags.map((t) => (
+                    <span className="card-tag" key={t}>{t}</span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
@@ -116,14 +116,13 @@ export default function Overlay() {
 
       {/* ── 04  TECH STACK ───────────────────────────── */}
       <section className="chapter right">
-        <div className="eyebrow">03 — Technology</div>
+        <div className="eyebrow">03 — Materials</div>
         <h2 className="title">
-          Tools forged
-          <br />for the <em>task</em>
+          The craft,<br /><em>distilled</em>
         </h2>
         <p className="body-copy">
-          We live in the GPU. Every tool we choose is built to squeeze maximum
-          visual fidelity out of real-time rendering.
+          We live in the GPU. Each instrument chosen for maximum visual
+          fidelity at real-time speeds.
         </p>
         <div className="tech-grid">
           {techStack.map((t) => (
@@ -134,18 +133,17 @@ export default function Overlay() {
 
       {/* ── 05  CONTACT ──────────────────────────────── */}
       <section className="chapter center">
-        <div className="eyebrow">04 — Connect</div>
+        <div className="eyebrow">04 — Atelier</div>
         <h2 className="title">
-          Let's build something
-          <br />you've <em>never seen</em> before
+          Commission something<br />you've <em>never seen</em>
         </h2>
         <p className="body-copy">
-          We're always open to new projects, collabs, and wild ideas.
-          <br />If it pushes the limits of the web, we want to hear it.
+          We take on projects where craft is non-negotiable<br />
+          and ambition has no ceiling.
         </p>
         <div className="cta-group">
           <a className="cta-btn" href="mailto:hello@insane3d.dev">
-            Get in Touch →
+            Begin a Conversation →
           </a>
           <span className="cta-email">hello@insane3d.dev</span>
         </div>
