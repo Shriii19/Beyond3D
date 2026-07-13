@@ -4,7 +4,6 @@ import { useScroll, Scroll, Environment } from "@react-three/drei";
 import {
   EffectComposer,
   Bloom,
-  ChromaticAberration,
   Vignette,
   Noise,
 } from "@react-three/postprocessing";
@@ -42,12 +41,12 @@ function Rig() {
 export default function Experience() {
   return (
     <>
-      <color attach="background" args={["#05060a"]} />
-      <fog attach="fog" args={["#05060a", 12, 55]} />
+      <color attach="background" args={["#080705"]} />
+      <fog attach="fog" args={["#080705", 14, 60]} />
 
-      <ambientLight intensity={0.4} />
-      <pointLight position={[0, 0, 4]} intensity={30} color="#7b5cff" distance={30} />
-      <pointLight position={[6, 4, -20]} intensity={20} color="#ff5cf0" distance={40} />
+      <ambientLight intensity={0.12} />
+      <pointLight position={[0, 1, 4]} intensity={50} color="#f0c060" distance={35} />
+      <pointLight position={[8, 4, -20]} intensity={30} color="#c87020" distance={50} />
       <Environment preset="night" />
 
       <Rig />
@@ -65,16 +64,12 @@ export default function Experience() {
       <EffectComposer>
         <Bloom
           mipmapBlur
-          intensity={0.7}
-          luminanceThreshold={0.4}
-          luminanceSmoothing={0.6}
+          intensity={0.25}
+          luminanceThreshold={0.65}
+          luminanceSmoothing={0.8}
         />
-        <ChromaticAberration
-          blendFunction={BlendFunction.NORMAL}
-          offset={[0.0004, 0.0004]}
-        />
-        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.08} />
-        <Vignette eskil={false} offset={0.15} darkness={0.9} />
+        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.04} />
+        <Vignette eskil={false} offset={0.2} darkness={0.75} />
       </EffectComposer>
     </>
   );
