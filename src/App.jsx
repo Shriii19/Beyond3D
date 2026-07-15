@@ -20,8 +20,15 @@ export default function App() {
       <div className="canvas-wrap">
         <Canvas
           camera={{ position: [0, 0, 8], fov: 60 }}
-          dpr={[1, 1.75]}
-          gl={{ antialias: true, powerPreference: "high-performance" }}
+          dpr={[1, Math.min(window.devicePixelRatio, 2)]}
+          gl={{ 
+            antialias: true, 
+            powerPreference: "high-performance",
+            alpha: false,
+            stencil: false,
+            depth: true
+          }}
+          performance={{ min: 0.5 }}
         >
           <Suspense fallback={null}>
             <ScrollControls pages={5} damping={0.28}>

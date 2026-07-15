@@ -394,9 +394,28 @@ body {
 
 /* ─── Mobile ─────────────────────────────────── */
 @media (max-width: 640px) {
-  .work-item { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; }
+  .work-item { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; padding: 1rem 0; }
+  .hud .brand { top: 1.2rem; left: 1.2rem; font-size: 0.85rem; }
   .hud-nav { display: none; }
-  .stat-row { gap: 1.5rem; }
+  .progress-rail { right: 1rem; height: 80px; }
+  .scroll-cue { bottom: 1.2rem; }
+  .stat-row { gap: 1.5rem; flex-direction: column; }
+  .stat-row .stat { flex-direction: row; align-items: baseline; gap: 0.8rem; }
   .tech-grid { justify-content: flex-start; }
   .hero-title { font-size: clamp(2.6rem, 14vw, 5rem); }
+  .title { font-size: clamp(2rem, 8vw, 4rem); }
+  .chapter { padding: clamp(1rem, 4vw, 2rem); }
+  .eyebrow { font-size: 0.6rem; margin-bottom: 1rem; }
+  .body-copy { font-size: 0.9rem; margin-top: 1.2rem; }
+  .work-title { font-size: 1.05rem; }
+  .work-desc { font-size: 0.72rem; }
+  .cta-btn { padding: 0.7rem 1.8rem; font-size: 0.62rem; }
+}
+
+@media (max-width: 480px) {
+  .work-item { grid-template-columns: 1fr; }
+  .work-num { padding-top: 0; opacity: 0.6; }
+  .hud .brand { font-size: 0.8rem; }
+  .stat-num { font-size: 2rem; }
+  .stat-label { font-size: 0.52rem; }
 }
