@@ -33,14 +33,14 @@ export default function App() {
       </div>
 
       <div className="hud">
-        <div className="brand">
+        <div className="brand" role="banner">
           <span className="brand-name">INSANE</span>
           <span className="brand-accent">3D</span>
         </div>
-        <nav className="hud-nav">
-          <span>Work</span>
-          <span>About</span>
-          <span>Contact</span>
+        <nav className="hud-nav" aria-label="Main navigation">
+          <a href="#works" aria-label="View our works">Work</a>
+          <a href="#about" aria-label="Learn about us">About</a>
+          <a href="#contact" aria-label="Get in touch">Contact</a>
         </nav>
         <div className="scroll-cue">
           <span>scroll</span>

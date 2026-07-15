@@ -151,12 +151,14 @@ body {
   color: var(--muted);
   pointer-events: auto;
 }
-.hud-nav span {
+.hud-nav a {
   cursor: pointer;
   transition: color 0.2s;
   position: relative;
+  text-decoration: none;
+  color: var(--muted);
 }
-.hud-nav span::after {
+.hud-nav a::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -166,8 +168,13 @@ body {
   background: var(--gold);
   transition: width 0.25s ease;
 }
-.hud-nav span:hover { color: var(--cream); }
-.hud-nav span:hover::after { width: 100%; }
+.hud-nav a:hover,
+.hud-nav a:focus { 
+  color: var(--cream); 
+  outline: none;
+}
+.hud-nav a:hover::after,
+.hud-nav a:focus::after { width: 100%; }
 
 /* ─── Title Variants ─────────────────────────── */
 .hero-title { font-size: clamp(3rem, 9.5vw, 9rem); }

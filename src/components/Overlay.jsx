@@ -50,7 +50,7 @@ export default function Overlay() {
   return (
     <>
       {/* ── 01  HERO ─────────────────────────────────── */}
-      <section className="chapter center">
+      <section className="chapter center" id="home">
         <div className="eyebrow">INSANE 3D — Digital Atelier</div>
         <h1 className="title hero-title">
           We craft worlds<br />at the speed of <em>light</em>
@@ -62,7 +62,7 @@ export default function Overlay() {
       </section>
 
       {/* ── 02  ABOUT ────────────────────────────────── */}
-      <section className="chapter">
+      <section className="chapter" id="about">
         <div className="eyebrow">01 — Philosophy</div>
         <h2 className="title">
           Born where precision<br />meets the <em>impossible</em>
@@ -88,7 +88,7 @@ export default function Overlay() {
       </section>
 
       {/* ── 03  WORKS ────────────────────────────────── */}
-      <section className="chapter wide">
+      <section className="chapter wide" id="works">
         <div className="eyebrow">02 — Works</div>
         <h2 className="title projects-title">
           Selected <em>works</em>
@@ -132,7 +132,7 @@ export default function Overlay() {
       </section>
 
       {/* ── 05  CONTACT ──────────────────────────────── */}
-      <section className="chapter center">
+      <section className="chapter center" id="contact">
         <div className="eyebrow">04 — Atelier</div>
         <h2 className="title">
           Commission something<br />you've <em>never seen</em>
