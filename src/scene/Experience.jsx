@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useScroll, Scroll, Environment } from "@react-three/drei";
 import {
@@ -16,6 +16,7 @@ function Rig() {
   const scroll = useScroll();
   const { camera, pointer } = useThree();
   const target = useRef(new THREE.Vector3());
+  const targetPos = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
     const offset = scroll.offset; // 0 -> 1
@@ -24,7 +25,7 @@ function Rig() {
     // Gentle mouse parallax + idle sway
     const swayX = Math.sin(state.clock.elapsedTime * 0.3) * 0.6;
     const swayY = Math.cos(state.clock.elapsedTime * 0.2) * 0.4;
-    const targetPos = new THREE.Vector3(
+    targetPos.set(
       pointer.x * 1.2 + swayX,
       pointer.y * 1.2 + swayY + 0.2,
       z
@@ -39,6 +40,8 @@ function Rig() {
 }
 
 export default function Experience() {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
   return (
     <>
       <color attach="background" args={["#080705"]} />
@@ -54,14 +57,14 @@ export default function Experience() {
       <Core position={[0, 0, 0]} scale={1} />
       <Gates />
       <Shards />
-      <Particles />
+      <Particles count={isMobile ? 1000 : 1800} />
 
       {/* HTML chapters scroll in sync with the 3D offset */}
       <Scroll html>
         <Overlay />
       </Scroll>
 
-      <EffectComposer>
+      <EffectComposer multisampling={isMobile ? 0 : 8}>
         <Bloom
           mipmapBlur
           intensity={0.25}

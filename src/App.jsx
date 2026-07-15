@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ScrollControls, useScroll } from "@react-three/drei";
 import Experience from "./scene/Experience.jsx";
@@ -12,8 +12,25 @@ function ProgressReporter({ fillRef }) {
   return null;
 }
 
+// Simple loading fallback
+function LoadingFallback() {
+  return <div className="loader">Loading Experience...</div>;
+}
+
 export default function App() {
   const fillRef = useRef(null);
+
+  // Cleanup and performance hints
+  useEffect(() => {
+    // Prevent right-click context menu on canvas for better UX
+    const handleContextMenu = (e) => {
+      if (e.target.tagName === 'CANVAS') {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('contextmenu', handleContextMenu);
+    return () => document.removeEventListener('contextmenu', handleContextMenu);
+  }, []);
 
   return (
     <>
@@ -30,7 +47,7 @@ export default function App() {
           }}
           performance={{ min: 0.5 }}
         >
-          <Suspense fallback={null}>
+          <Suspense fallback={<LoadingFallback />}>
             <ScrollControls pages={5} damping={0.28}>
               <Experience />
               <ProgressReporter fillRef={fillRef} />
