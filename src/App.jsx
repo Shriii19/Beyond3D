@@ -29,11 +29,25 @@ export default function App() {
       }
     };
     document.addEventListener('contextmenu', handleContextMenu);
-    return () => document.removeEventListener('contextmenu', handleContextMenu);
+
+    const handlePointerMove = (e) => {
+      document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+      document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('pointermove', handlePointerMove);
+    };
   }, []);
 
   return (
     <>
+      <div className="atmosphere" aria-hidden="true" />
+      <div className="grid-overlay" aria-hidden="true" />
+      <div className="cursor-glow" aria-hidden="true" />
+
       <div className="canvas-wrap">
         <Canvas
           camera={{ position: [0, 0, 8], fov: 60 }}
@@ -57,7 +71,7 @@ export default function App() {
       </div>
 
       <div className="hud">
-        <div className="brand" role="banner">
+        <div className="brand" role="banner" aria-label="Insane 3D">
           <span className="brand-name">INSANE</span>
           <span className="brand-accent">3D</span>
         </div>
