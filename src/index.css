@@ -1,6 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap");
+
 :root {
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
   --black: #080705;
-  --surface: #0e0c09;
+  --surface: #14100b;
   --gold: #c8a96e;
   --gold-light: #e8d5a3;
   --gold-dim: #7a6540;
@@ -16,26 +20,62 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
-
 html, body, #root { width: 100%; height: 100%; }
 
+html { scroll-behavior: smooth; }
+
 body {
-  background: var(--black);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(200, 169, 110, 0.14), transparent 48%),
+    radial-gradient(circle at 85% 65%, rgba(184, 116, 40, 0.12), transparent 52%),
+    linear-gradient(155deg, #080705 0%, #0f0c08 45%, #090806 100%);
   color: var(--cream);
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Canvas fills the viewport; overlay scrolls on top */
+.atmosphere,
+.grid-overlay,
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.atmosphere {
+  z-index: 1;
+  opacity: 0.5;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(200, 169, 110, 0.12), transparent 70%),
+    radial-gradient(900px 500px at -20% 120%, rgba(184, 116, 40, 0.12), transparent 65%);
+}
+
+.grid-overlay {
+  z-index: 2;
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgba(232, 213, 163, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 213, 163, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+.cursor-glow {
+  z-index: 3;
+  background: radial-gradient(
+    260px circle at var(--mouse-x) var(--mouse-y),
+    rgba(200, 169, 110, 0.17),
+    transparent 75%
+  );
+}
+
 .canvas-wrap {
   position: fixed;
   inset: 0;
   z-index: 0;
 }
 
-/* --- Overlay chapters (rendered by drei <Scroll html>) --- */
 .chapter {
   width: 100vw;
   height: 100vh;
@@ -48,22 +88,18 @@ body {
   animation: fadeInUp 0.8s ease forwards;
   animation-delay: 0.2s;
 }
+
 .chapter.right { align-items: flex-end; text-align: right; }
 .chapter.center { align-items: center; text-align: center; }
+.chapter.wide { padding: clamp(1.5rem, 3.5vw, 4.5rem); }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .eyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.44em;
   text-transform: uppercase;
@@ -73,23 +109,27 @@ body {
 }
 
 .title {
-  font-family: "Instrument Serif", serif;
-  font-weight: 400;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
   font-size: clamp(2.8rem, 9vw, 8.5rem);
   line-height: 0.95;
   letter-spacing: -0.02em;
   max-width: 16ch;
   text-shadow: 0 0 80px rgba(200, 169, 110, 0.18);
 }
+
 .title em {
   font-style: italic;
   color: var(--gold);
 }
 
+.hero-title { font-size: clamp(3rem, 9.5vw, 9rem); }
+.projects-title { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 0; }
+
 .body-copy {
   margin-top: 1.6rem;
   max-width: 42ch;
-  font-weight: 300;
+  font-weight: 400;
   font-size: clamp(0.95rem, 1.6vw, 1.15rem);
   line-height: 1.65;
   color: var(--muted);
@@ -99,28 +139,104 @@ body {
 .chapter.right .title { margin-left: auto; }
 .chapter.center .body-copy { margin-left: auto; margin-right: auto; }
 
-/* Fixed HUD chrome */
 .hud {
   position: fixed;
   inset: 0;
   z-index: 10;
   pointer-events: none;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   color: var(--muted);
   text-transform: uppercase;
 }
-.hud .brand { position: absolute; top: 2rem; left: 2rem; color: var(--cream); display: flex; align-items: baseline; gap: 0.28rem; }
+
+.hud .brand {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  color: var(--cream);
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgba(232, 213, 163, 0.18);
+  background: rgba(8, 7, 5, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.brand-name {
+  color: var(--cream);
+  font-weight: 600;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.brand-accent { color: var(--gold); }
+
+.hud-nav {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  pointer-events: auto;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(232, 213, 163, 0.12);
+  background: rgba(8, 7, 5, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.hud-nav a {
+  cursor: pointer;
+  transition: color 0.2s;
+  position: relative;
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.hud-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.25s ease;
+}
+
+.hud-nav a:hover,
+.hud-nav a:focus {
+  color: var(--cream);
+  outline: none;
+}
+
+.hud-nav a:hover::after,
+.hud-nav a:focus::after { width: 100%; }
+
 .hud .scroll-cue {
-  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
-  animation: float 2.4s ease-in-out infinite;
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
   opacity: 0;
   animation: fadeIn 1s ease forwards 1.5s, float 2.4s ease-in-out infinite 1.5s;
 }
-.hud .scroll-cue .line { 
-  width: 1px; height: 34px; 
+
+.hud .scroll-cue .line {
+  width: 1px;
+  height: 34px;
   background: linear-gradient(var(--gold), transparent);
   animation: linePulse 2s ease-in-out infinite;
 }
@@ -139,91 +255,47 @@ body {
   50% { transform: translateX(-50%) translateY(5px); opacity: 0.5; }
 }
 
-/* Progress rail */
 .progress-rail {
-  position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
-  z-index: 10; width: 1px; height: 120px;
-  background: rgba(200, 169, 110, 0.1); pointer-events: none;
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 1px;
+  height: 120px;
+  background: rgba(200, 169, 110, 0.1);
+  pointer-events: none;
 }
+
 .progress-rail .fill {
-  position: absolute; top: 0; left: 0; width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   background: linear-gradient(var(--gold), var(--amber));
   box-shadow: 0 0 10px rgba(200, 169, 110, 0.4);
 }
 
 .loader {
-  position: fixed; inset: 0; z-index: 50;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--black); color: var(--muted);
-  font-family: "JetBrains Mono", monospace; letter-spacing: 0.3em;
-  font-size: 0.72rem; text-transform: uppercase;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.3em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
   opacity: 1;
   transition: opacity 0.5s ease;
   pointer-events: none;
 }
-.loader.loaded {
-  opacity: 0;
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .hud .scroll-cue { animation: none; }
-}
+.loader.loaded { opacity: 0; }
 
-/* ═══════════════════════════════════════════════════
-   INSANE 3D — Portfolio Styles
-   ═══════════════════════════════════════════════════ */
-
-/* ─── Brand ──────────────────────────────────── */
-.brand-name { color: var(--cream); font-weight: 400; font-family: "Instrument Serif", serif; font-size: 0.92rem; letter-spacing: 0.08em; }
-.brand-accent { color: var(--gold); }
-
-/* ─── HUD Nav ────────────────────────────────── */
-.hud-nav {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  display: flex;
-  gap: 2rem;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--muted);
-  pointer-events: auto;
-}
-.hud-nav a {
-  cursor: pointer;
-  transition: color 0.2s;
-  position: relative;
-  text-decoration: none;
-  color: var(--muted);
-}
-.hud-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--gold);
-  transition: width 0.25s ease;
-}
-.hud-nav a:hover,
-.hud-nav a:focus { 
-  color: var(--cream); 
-  outline: none;
-}
-.hud-nav a:hover::after,
-.hud-nav a:focus::after { width: 100%; }
-
-/* ─── Title Variants ─────────────────────────── */
-.hero-title { font-size: clamp(3rem, 9.5vw, 9rem); }
-.projects-title { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 0; }
-
-/* ─── Wide Chapter (Projects/Works) ─────────── */
-.chapter.wide { padding: clamp(1.5rem, 3.5vw, 4.5rem); }
-
-/* ─── Works List (editorial) ─────────────────── */
 .works-list {
   width: 100%;
   max-width: 900px;
@@ -241,16 +313,16 @@ body {
   transition: opacity var(--transition-base), transform var(--transition-base);
   cursor: pointer;
 }
+
 .work-item:hover {
   opacity: 1;
   transform: translateX(4px);
 }
-.work-item:hover .work-title {
-  color: var(--gold-light);
-}
+
+.work-item:hover .work-title { color: var(--gold-light); }
 
 .work-num {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.58rem;
   letter-spacing: 0.25em;
   color: var(--gold-dim);
@@ -271,9 +343,9 @@ body {
 }
 
 .work-title {
-  font-family: "Instrument Serif", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 1.22rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--cream);
   line-height: 1.2;
   transition: color var(--transition-base);
@@ -283,48 +355,8 @@ body {
   font-size: 0.78rem;
   line-height: 1.6;
   color: var(--muted);
-  font-weight: 300;
-  max-width: 70ch;
-}
-
-.status-badge {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0.18rem 0.5rem;
-  border-radius: 2px;
-}
-.status-badge.upcoming {
-  background: rgba(200, 169, 110, 0.08);
-  color: var(--gold);
-  border: 1px solid rgba(200, 169, 110, 0.22);
-}
-.status-badge.in-dev {
-  background: rgba(200, 169, 110, 0.12);
-  color: var(--gold-light);
-  border: 1px solid rgba(200, 169, 110, 0.3);
-}
-.status-badge.live {
-  background: rgba(200, 169, 110, 0.16);
-  color: var(--cream);
-  border: 1px solid rgba(200, 169, 110, 0.35);
-}
-
-.card-title {
-  font-family: "Instrument Serif", serif;
-  font-size: 1.18rem;
   font-weight: 400;
-  color: var(--cream);
-  line-height: 1.2;
-}
-
-.card-desc {
-  font-size: 0.8rem;
-  line-height: 1.52;
-  color: var(--muted);
-  font-weight: 300;
-  flex: 1;
+  max-width: 70ch;
 }
 
 .card-tags {
@@ -335,7 +367,7 @@ body {
 }
 
 .card-tag {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.54rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -346,22 +378,55 @@ body {
   border: 1px solid rgba(200, 169, 110, 0.14);
 }
 
-/* ─── Stats ──────────────────────────────────── */
+.status-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 2px;
+}
+
+.status-badge.upcoming {
+  background: rgba(200, 169, 110, 0.08);
+  color: var(--gold);
+  border: 1px solid rgba(200, 169, 110, 0.22);
+}
+
+.status-badge.in-dev {
+  background: rgba(200, 169, 110, 0.12);
+  color: var(--gold-light);
+  border: 1px solid rgba(200, 169, 110, 0.3);
+}
+
+.status-badge.live {
+  background: rgba(200, 169, 110, 0.16);
+  color: var(--cream);
+  border: 1px solid rgba(200, 169, 110, 0.35);
+}
+
 .stat-row {
   display: flex;
   gap: 3rem;
   margin-top: 2.2rem;
   flex-wrap: wrap;
 }
-.stat { display: flex; flex-direction: column; gap: 0.28rem; }
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
 .stat-num {
-  font-family: "Instrument Serif", serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 2.6rem;
   color: var(--gold);
   line-height: 1;
 }
+
 .stat-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.58rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -378,7 +443,7 @@ body {
 }
 
 .tech-item {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -390,13 +455,13 @@ body {
   pointer-events: auto;
   transition: color 0.22s, border-color 0.22s, background 0.22s;
 }
+
 .tech-item:hover {
   color: var(--cream);
   border-color: rgba(200, 169, 110, 0.38);
   background: rgba(200, 169, 110, 0.06);
 }
 
-/* ─── CTA ────────────────────────────────────── */
 .cta-group {
   display: flex;
   flex-direction: column;
@@ -414,7 +479,7 @@ body {
   border: 1px solid rgba(200, 169, 110, 0.5);
   background: rgba(200, 169, 110, 0.04);
   color: var(--gold);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.26em;
   text-transform: uppercase;
@@ -424,6 +489,7 @@ body {
   transition: background 0.25s, box-shadow 0.25s, border-color 0.25s;
   text-decoration: none;
 }
+
 .cta-btn:hover {
   background: rgba(200, 169, 110, 0.1);
   border-color: rgba(200, 169, 110, 0.75);
@@ -431,18 +497,21 @@ body {
 }
 
 .cta-email {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   color: var(--muted);
   opacity: 0.7;
 }
 
-/* ─── Pointer events for interactive overlay elements */
 .chapter a,
 .chapter button { pointer-events: auto; }
 
-/* ─── Mobile ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hud .scroll-cue { animation: none; }
+  .cursor-glow { display: none; }
+}
+
 @media (max-width: 640px) {
   .work-item { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; padding: 1rem 0; }
   .hud .brand { top: 1.2rem; left: 1.2rem; font-size: 0.85rem; }
