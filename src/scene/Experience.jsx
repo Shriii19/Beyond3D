@@ -1,6 +1,6 @@
 import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useScroll, Scroll, Environment } from "@react-three/drei";
+import { useScroll, Environment } from "@react-three/drei";
 import {
   EffectComposer,
   Bloom,
@@ -10,7 +10,6 @@ import {
 import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 import { Core, Particles, Gates, Shards } from "./Objects.jsx";
-import Overlay from "../components/Overlay.jsx";
 
 function Rig() {
   const scroll = useScroll();
@@ -50,25 +49,20 @@ export default function Experience() {
       <ambientLight intensity={0.12} />
       <pointLight position={[0, 1, 4]} intensity={50} color="#f0c060" distance={35} />
       <pointLight position={[8, 4, -20]} intensity={30} color="#c87020" distance={50} />
-      <Environment preset="night" />
+      <Environment preset="night" background={false} />
 
       <Rig />
 
-      <Core position={[0, 0, 0]} scale={1} />
+      <Core position={[0, 0, -3.5]} scale={1.2} />
       <Gates />
       <Shards />
       <Particles count={isMobile ? 1000 : 1800} />
 
-      {/* HTML chapters scroll in sync with the 3D offset */}
-      <Scroll html>
-        <Overlay />
-      </Scroll>
-
       <EffectComposer multisampling={isMobile ? 0 : 8}>
         <Bloom
           mipmapBlur
-          intensity={0.25}
-          luminanceThreshold={0.65}
+          intensity={0.08}
+          luminanceThreshold={0.9}
           luminanceSmoothing={0.8}
         />
         <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.04} />
