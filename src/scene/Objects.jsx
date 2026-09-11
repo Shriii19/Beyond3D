@@ -2,7 +2,7 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import "./IridescentMaterial.js";
 
-export function Core({ position = [0, 0, 0], scale = 1 }) {
+export function Core({ position = [0, 0, 0], scale = 1, tint = "#d7b576" }) {
   const group = useRef();
   const ringGroup = useRef();
 
@@ -37,7 +37,7 @@ export function Core({ position = [0, 0, 0], scale = 1 }) {
         {rings.map((r, i) => (
           <mesh key={i} rotation={r.tilt}>
             <torusGeometry args={[r.radius, 0.004, 10, 120]} />
-            <meshBasicMaterial color={i % 2 === 0 ? "#c8a96e" : "#5a4a3d"} toneMapped transparent opacity={0.55} />
+            <meshBasicMaterial color={i % 2 === 0 ? tint : "#5a4a3d"} toneMapped transparent opacity={0.55} />
           </mesh>
         ))}
       </group>
@@ -45,8 +45,8 @@ export function Core({ position = [0, 0, 0], scale = 1 }) {
       <mesh scale={1.65}>
         <icosahedronGeometry args={[0.19, 1]} />
         <meshStandardMaterial
-          color="#f7dca1"
-          emissive="#f3c96b"
+          color={tint}
+          emissive={tint}
           emissiveIntensity={0.32}
           metalness={0.9}
           roughness={0.2}
@@ -62,7 +62,7 @@ export function Core({ position = [0, 0, 0], scale = 1 }) {
   );
 }
 
-export function Particles({ count = 1800, depth = 90 }) {
+export function Particles({ count = 1800, depth = 90, tint = "#d7b576", density = 0.72 }) {
   const ref = useRef();
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
@@ -75,7 +75,7 @@ export function Particles({ count = 1800, depth = 90 }) {
   }, [count, depth]);
 
   useFrame((state) => {
-    if (ref.current) ref.current.rotation.z = state.clock.elapsedTime * 0.015;
+    if (ref.current) ref.current.rotation.z = state.clock.elapsedTime * (0.015 + density * 0.02);
   });
 
   return (
@@ -85,7 +85,7 @@ export function Particles({ count = 1800, depth = 90 }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.045}
-        color="#f1c878"
+        color={tint}
         transparent
         opacity={0.7}
         sizeAttenuation
@@ -95,7 +95,7 @@ export function Particles({ count = 1800, depth = 90 }) {
   );
 }
 
-export function Gates() {
+export function Gates({ intensity = 1 }) {
   const gates = useMemo(
     () =>
       Array.from({ length: 15 }, (_, i) => ({
@@ -112,7 +112,7 @@ export function Gates() {
   useFrame((state) => {
     if (group.current) {
       group.current.children.forEach((child, i) => {
-        child.rotation.z = state.clock.elapsedTime * 0.14 + i * 0.35;
+        child.rotation.z = state.clock.elapsedTime * (0.14 + intensity * 0.06) + i * 0.35;
       });
     }
   });
@@ -122,7 +122,7 @@ export function Gates() {
       {gates.map((g, i) => (
         <mesh key={i} position={[0, 0, g.z]} rotation={[0, 0, g.rot]}>
           <torusGeometry args={[g.r, 0.012, 8, 120]} />
-          <meshBasicMaterial color={i % 2 === 0 ? "#866c3d" : "#a57b42"} toneMapped transparent opacity={g.opacity} />
+          <meshBasicMaterial color={i % 2 === 0 ? "#866c3d" : "#a57b42"} toneMapped transparent opacity={g.opacity * intensity} />
         </mesh>
       ))}
     </group>
