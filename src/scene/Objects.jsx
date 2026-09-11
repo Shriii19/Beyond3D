@@ -4,20 +4,52 @@ import { Icosahedron } from "@react-three/drei";
 import * as THREE from "three";
 import "./IridescentMaterial.js";
 
-/* The living, iridescent hero core */
+/* A subtle wireframe astrolabe — dark, quiet, and readable behind text */
 export function Core({ position = [0, 0, 0], scale = 1 }) {
-  const mat = useRef();
   const group = useRef();
+  const ringGroup = useRef();
+
+  const rings = useMemo(
+    () =>
+      Array.from({ length: 5 }, (_, i) => ({
+        radius: 0.45 + i * 0.28,
+        speed: (i % 2 === 0 ? 1 : -1) * (0.15 + i * 0.04),
+        tilt: [
+          (Math.random() - 0.5) * 1.2,
+          (Math.random() - 0.5) * 1.2,
+          (Math.random() - 0.5) * 1.2,
+        ],
+      })),
+    []
+  );
+
   useFrame((state) => {
-    if (mat.current) mat.current.uTime = state.clock.elapsedTime;
-    if (group.current) group.current.rotation.y = state.clock.elapsedTime * 0.15;
+    const t = state.clock.elapsedTime;
+    if (group.current) group.current.rotation.y = t * 0.03;
+    if (ringGroup.current) {
+      ringGroup.current.children.forEach((child, i) => {
+        child.rotation.x += rings[i].speed * 0.01;
+        child.rotation.z += rings[i].speed * 0.008;
+      });
+    }
   });
+
   return (
     <group ref={group} position={position} scale={scale}>
-      <Icosahedron args={[2, 64]}>
-        {/* @ts-ignore custom material registered via extend */}
-        <iridescentMaterial ref={mat} uDisplace={0.45} />
-      </Icosahedron>
+      <group ref={ringGroup}>
+        {rings.map((r, i) => (
+          <mesh key={i} rotation={r.tilt}>
+            <torusGeometry args={[r.radius, 0.0025, 5, 80]} />
+            <meshBasicMaterial color="#5c4d32" toneMapped transparent opacity={0.45} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* Faint center seed */}
+      <mesh>
+        <icosahedronGeometry args={[0.06, 0]} />
+        <meshBasicMaterial color="#4a4030" toneMapped transparent opacity={0.5} />
+      </mesh>
     </group>
   );
 }
@@ -56,7 +88,7 @@ export function Particles({ count = 1800, depth = 90 }) {
   );
 }
 
-/* Wireframe rings the camera passes through, like gates in space */
+/* Subtle wireframe rings the camera passes through, like gates in space */
 export function Gates() {
   const gates = useMemo(
     () =>
@@ -64,7 +96,6 @@ export function Gates() {
         z: -i * 6 - 4,
         r: 4 + Math.sin(i * 0.7) * 1.5,
         rot: i * 0.4,
-        color: i % 2 === 0 ? "#c8a96e" : "#e8d5a3",
       })),
     []
   );
@@ -80,15 +111,15 @@ export function Gates() {
     <group ref={group}>
       {gates.map((g, i) => (
         <mesh key={i} position={[0, 0, g.z]} rotation={[0, 0, g.rot]}>
-          <torusGeometry args={[g.r, 0.02, 8, 100]} />
-          <meshBasicMaterial color={g.color} toneMapped={false} />
+          <torusGeometry args={[g.r, 0.012, 8, 100]} />
+          <meshBasicMaterial color="#6a5a3a" toneMapped transparent opacity={0.45} />
         </mesh>
       ))}
     </group>
   );
 }
 
-/* Small chapter markers — glowing shards floating beside the path */
+/* Small chapter markers — quiet shards floating beside the path */
 export function Shards() {
   const shards = useMemo(
     () =>
@@ -99,7 +130,7 @@ export function Shards() {
           -Math.random() * 80,
         ],
         s: Math.random() * 0.4 + 0.1,
-        color: ["#c8a96e", "#e8d5a3", "#b87428", "#d4b870"][
+        color: ["#7a6540", "#8a7048", "#6a5a3a", "#5c4d32"][
           Math.floor(Math.random() * 4)
         ],
       })),
@@ -121,8 +152,8 @@ export function Shards() {
           <meshStandardMaterial
             color={s.color}
             emissive={s.color}
-            emissiveIntensity={2}
-            toneMapped={false}
+            emissiveIntensity={0.35}
+            toneMapped
           />
         </mesh>
       ))}
