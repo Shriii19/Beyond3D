@@ -1,6 +1,6 @@
 import { useRef, useMemo } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useScroll, Environment } from "@react-three/drei";
+import { Environment } from "@react-three/drei";
 import {
   EffectComposer,
   Bloom,
@@ -11,62 +11,68 @@ import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
 import { Core, Particles, Gates, Shards } from "./Objects.jsx";
 
-function Rig() {
-  const scroll = useScroll();
+const palette = {
+  ocean: { background: "#070a12", fog: "#070a12", glow: "#8ec5ff", warm: "#f7dca1", accent: "#8ec5ff" },
+  desert: { background: "#150d08", fog: "#150d08", glow: "#f5b76c", warm: "#f5d3a6", accent: "#f5b76c" },
+  forest: { background: "#070d0d", fog: "#070d0d", glow: "#9fe7a4", warm: "#e0dcbc", accent: "#9fe7a4" },
+  city: { background: "#080b12", fog: "#080b12", glow: "#b28ef6", warm: "#f0d9ff", accent: "#b28ef6" },
+  gallery: { background: "#0d0a09", fog: "#0d0a09", glow: "#d7b576", warm: "#f4dfb1", accent: "#d7b576" },
+  space: { background: "#05070e", fog: "#05070e", glow: "#8ef7d7", warm: "#d5f7ff", accent: "#8ef7d7" },
+};
+
+function Rig({ scrollProgressRef }) {
   const { camera, pointer } = useThree();
   const target = useRef(new THREE.Vector3());
   const targetPos = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
-    const offset = scroll.offset; // 0 -> 1
-    // Fly forward through the corridor
-    const z = 8 - offset * 74;
-    // Gentle mouse parallax + idle sway
-    const swayX = Math.sin(state.clock.elapsedTime * 0.3) * 0.6;
-    const swayY = Math.cos(state.clock.elapsedTime * 0.2) * 0.4;
-    targetPos.set(
-      pointer.x * 1.2 + swayX,
-      pointer.y * 1.2 + swayY + 0.2,
-      z
-    );
-    camera.position.lerp(targetPos, 1 - Math.pow(0.001, delta));
-    // Always look a little further down the tunnel
-    target.current.set(0, 0, z - 10);
+    const offset = scrollProgressRef?.current ?? 0;
+    const z = 8 - offset * 84;
+    const swayX = Math.sin(state.clock.elapsedTime * 0.3) * 0.7;
+    const swayY = Math.cos(state.clock.elapsedTime * 0.25) * 0.52 + 0.25;
+
+    targetPos.set(pointer.x * 1.6 + swayX, pointer.y * 1.5 + swayY, z);
+    camera.position.lerp(targetPos, 1 - Math.pow(0.02, delta));
+
+    target.current.set(pointer.x * 1.4, pointer.y * 0.8, z - 10);
     camera.lookAt(target.current);
   });
 
   return null;
 }
 
-export default function Experience() {
+export default function Experience({ sceneState = { environment: "ocean", mood: "cinematic", particleLevel: 0.8, density: 0.72, energy: 1, accent: "#d7b576" }, scrollProgressRef }) {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
+  const paletteData = palette[sceneState.environment] || palette.ocean;
+  const particleCount = isMobile ? 1000 : Math.round(1400 + (sceneState.particleLevel || 0.8) * 1200);
+
   return (
     <>
-      <color attach="background" args={["#080705"]} />
-      <fog attach="fog" args={["#080705", 14, 60]} />
+      <color attach="background" args={[paletteData.background]} />
+      <fog attach="fog" args={[paletteData.fog, 12, 72]} />
 
-      <ambientLight intensity={0.12} />
-      <pointLight position={[0, 1, 4]} intensity={50} color="#f0c060" distance={35} />
-      <pointLight position={[8, 4, -20]} intensity={30} color="#c87020" distance={50} />
+      <ambientLight intensity={0.14 + (sceneState.energy || 1) * 0.08} />
+      <pointLight position={[0, 1.5, 4]} intensity={30 * (sceneState.energy || 1)} color={paletteData.warm} distance={36} />
+      <pointLight position={[7, 3, -12]} intensity={28 * (sceneState.energy || 1)} color={paletteData.glow} distance={56} />
+      <pointLight position={[-8, -2, -18]} intensity={20 * (sceneState.energy || 1)} color={sceneState.accent || paletteData.accent} distance={60} />
       <Environment preset="night" background={false} />
 
-      <Rig />
+      <Rig scrollProgressRef={scrollProgressRef} />
 
-      <Core position={[0, 0, -3.5]} scale={1.2} />
-      <Gates />
+      <Core position={[0, 0, -3.5]} scale={1.26} tint={sceneState.accent || paletteData.accent} />
+      <Gates intensity={sceneState.energy || 1} />
       <Shards />
-      <Particles count={isMobile ? 1000 : 1800} />
+      <Particles count={particleCount} tint={sceneState.accent || paletteData.accent} density={sceneState.density || 0.72} />
 
       <EffectComposer multisampling={isMobile ? 0 : 8}>
         <Bloom
           mipmapBlur
-          intensity={0.08}
-          luminanceThreshold={0.9}
-          luminanceSmoothing={0.8}
+          intensity={0.1 + (sceneState.energy || 1) * 0.08}
+          luminanceThreshold={0.88}
+          luminanceSmoothing={0.9}
         />
-        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.04} />
-        <Vignette eskil={false} offset={0.2} darkness={0.75} />
+        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.04 + (sceneState.density || 0.72) * 0.03} />
+        <Vignette eskil={false} offset={0.2} darkness={0.8} />
       </EffectComposer>
     </>
   );
