@@ -25,8 +25,8 @@ export function Core({ position = [0, 0, 0], scale = 1, tint = "#d7b576" }) {
     if (group.current) group.current.rotation.y = t * 0.04;
     if (ringGroup.current) {
       ringGroup.current.children.forEach((child, i) => {
-        child.rotation.x += rings[i].speed * 0.012;
-        child.rotation.z += rings[i].speed * 0.009;
+        child.rotation.x = rings[i].tilt[0] + t * rings[i].speed * 0.72;
+        child.rotation.z = rings[i].tilt[2] + t * rings[i].speed * 0.54;
       });
     }
   });
@@ -153,7 +153,7 @@ export function Shards() {
     ref.current.children.forEach((c, i) => {
       c.rotation.x = state.clock.elapsedTime * 0.35 + i * 0.45;
       c.rotation.y = state.clock.elapsedTime * 0.22 + i * 0.32;
-      c.position.y += Math.sin(state.clock.elapsedTime + i) * 0.0006;
+      c.position.y = shards[i].pos[1] + Math.sin(state.clock.elapsedTime * 0.8 + i) * 0.12;
     });
   });
 
