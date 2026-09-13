@@ -24,17 +24,21 @@ function Rig({ scrollProgressRef }) {
   const { camera, pointer } = useThree();
   const target = useRef(new THREE.Vector3());
   const targetPos = useMemo(() => new THREE.Vector3(), []);
+  const reducedMotion = useMemo(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches, []);
 
   useFrame((state, delta) => {
     const offset = scrollProgressRef?.current ?? 0;
-    const z = 8 - offset * 84;
-    const swayX = Math.sin(state.clock.elapsedTime * 0.3) * 0.7;
-    const swayY = Math.cos(state.clock.elapsedTime * 0.25) * 0.52 + 0.25;
+    // Keep the camera inside the generated tunnel through the final chapter.
+    const z = 8 - offset * 72;
+    const swayX = reducedMotion ? 0 : Math.sin(state.clock.elapsedTime * 0.3) * 0.7;
+    const swayY = reducedMotion ? 0 : Math.cos(state.clock.elapsedTime * 0.25) * 0.52 + 0.25;
+    const pointerX = reducedMotion ? 0 : pointer.x;
+    const pointerY = reducedMotion ? 0 : pointer.y;
 
-    targetPos.set(pointer.x * 1.6 + swayX, pointer.y * 1.5 + swayY, z);
-    camera.position.lerp(targetPos, 1 - Math.pow(0.02, delta));
+    targetPos.set(pointerX * 1.6 + swayX, pointerY * 1.5 + swayY, z);
+    camera.position.lerp(targetPos, 1 - Math.exp(-7 * delta));
 
-    target.current.set(pointer.x * 1.4, pointer.y * 0.8, z - 10);
+    target.current.set(pointerX * 1.4, pointerY * 0.8, z - 10);
     camera.lookAt(target.current);
   });
 
