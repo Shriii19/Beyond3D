@@ -6,11 +6,15 @@ import CommandPalette from "./components/CommandPalette.jsx";
 import { defaultSceneState, parseCommand } from "./services/ai/aiClient.js";
 
 function ProgressReporter({ fillRef, scrollProgressRef }) {
-  useFrame(() => {
+  const displayedProgress = useRef(0);
+
+  useFrame((_, delta) => {
     const progress = Math.min(Math.max(scrollProgressRef.current ?? 0, 0), 1);
+    // Smooth abrupt wheel / trackpad jumps without making the indicator lag behind.
+    displayedProgress.current += (progress - displayedProgress.current) * (1 - Math.exp(-12 * delta));
 
     if (fillRef?.current) {
-      fillRef.current.style.height = `${Math.max(progress * 100, 8)}%`;
+      fillRef.current.style.height = `${Math.max(displayedProgress.current * 100, 8)}%`;
     }
   });
 
@@ -45,13 +49,19 @@ export default function App() {
       }
     };
 
-    const handleScroll = () => {
+    let frameId = 0;
+    const updateScrollProgress = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const nextProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
       scrollProgressRef.current = Math.min(Math.max(nextProgress, 0), 1);
+      frameId = 0;
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(updateScrollProgress);
+    };
+
+    updateScrollProgress();
     document.addEventListener("contextmenu", handleContextMenu);
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("keydown", handleKeyboardShortcuts);
@@ -64,6 +74,7 @@ export default function App() {
       window.removeEventListener("keydown", handleKeyboardShortcuts);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      if (frameId) window.cancelAnimationFrame(frameId);
     };
   }, []);
 
