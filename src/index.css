@@ -121,8 +121,9 @@ body::before {
 }
 
 .chapter {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1044,7 +1045,15 @@ body::before {
 .chapter button { pointer-events: auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hud .scroll-cue { animation: none; }
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
   .cursor-glow { display: none; }
 }
 
