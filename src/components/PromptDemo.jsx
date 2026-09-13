@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { generateSceneFromPrompt } from "../services/ai/aiClient.js";
 
 const examplePrompts = [
@@ -10,8 +10,6 @@ const examplePrompts = [
 export default function PromptDemo({ sceneState, onApplyPrompt, onTogglePalette }) {
   const [prompt, setPrompt] = useState(examplePrompts[0]);
   const [generated, setGenerated] = useState(generateSceneFromPrompt(examplePrompts[0], sceneState));
-
-  const preview = useMemo(() => generateSceneFromPrompt(prompt || examplePrompts[0], sceneState), [prompt, sceneState]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
